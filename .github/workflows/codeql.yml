@@ -1,0 +1,42 @@
+name: "CodeQL Advanced"
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "test", "prod" ]
+  schedule:
+    - cron: '22 21 * * 1'
+    #means your workflow is scheduled to run every Monday at 9:22 PM UTC, regardless of other repository activity
+
+permissions:
+  # required for all workflows
+  security-events: write
+  # required to fetch internal or private CodeQL packs
+  packages: read
+  # only required for workflows in private repositories
+  actions: read
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        # Remove explicit language in 'include' to auto-detect all project languages.
+        # If you want to force a specific set, use:
+        # language: [python, c-cpp, javascript-typescript, java-kotlin, go, ruby, rust, swift, actions]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{ matrix.language }}"
