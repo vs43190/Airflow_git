@@ -1,0 +1,36 @@
+name: Enforce PR Source Branch
+
+on:
+  pull_request:
+    branches:
+      - test
+      - prod
+
+jobs:
+  check-source-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR source branch
+        run: |
+          # Allowed source branches for each target branch
+          declare -A allowed_sources=( [test]=dev [prod]=test )
+
+          target_branch="${{ github.base_ref }}"
+          source_branch="${{ github.head_ref }}"
+
+          echo "PR target branch: $target_branch"
+          echo "PR source branch: $source_branch"
+
+          if [[ -z "${allowed_sources[$target_branch]}" ]]; then
+            echo "No source branch rules for target branch $target_branch, skipping check."
+            exit 0
+          fi
+
+          if [[ "${allowed_sources[$target_branch]}" != "$source_branch" ]]; then
+            echo "Error: PR source branch '$source_branch' is not allowed for target branch '$target_branch'."
+            echo "Allowed source branch: ${allowed_sources[$target_branch]}"
+            exit 1
+          fi
+
+          echo "Source branch check passed."
+        shell: bash
