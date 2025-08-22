@@ -1,0 +1,4 @@
+# .github/CODEOWNERS
+*              @vs43190
+/tst/*         @vs43190
+/prod/*        @vs43190
