@@ -3,7 +3,7 @@ name: Enforce PR Source Branch
 on:
   pull_request:
     branches:
-      - test
+      - tst
       - prod
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       - name: Check PR source branch
         run: |
           # Allowed source branches for each target branch
-          declare -A allowed_sources=( [test]=dev [prod]=test )
+          declare -A allowed_sources=( [tst]=dev [prod]=tst )
 
           target_branch="${{ github.base_ref }}"
           source_branch="${{ github.head_ref }}"
