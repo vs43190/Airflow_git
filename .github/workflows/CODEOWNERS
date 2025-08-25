@@ -1,4 +1,5 @@
 # .github/CODEOWNERS
-*              @vs43190
-/tst/*         @vs43190
-/prod/*        @vs43190
+*              @aneesh-sayal-tkd
+/tst/*         @aneesh-sayal-tkd
+/prod/*        @aneesh-sayal-tkd
+
